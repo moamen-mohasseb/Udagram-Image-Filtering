@@ -1,4 +1,5 @@
 import express from 'express';
+import  { Router, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
@@ -12,6 +13,32 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
+ // Get a greeting to a specific person 
+  // to demonstrate routing parameters
+  // > try it {{host}}/persons/:the_name
+ 
+
+  // Get a greeting to a specific person to demonstrate req.query
+  // > try it {{host}}/persons?name=the_name
+  app.get( "/filteredimage/", async( req: Request, res: Response ) => {
+    let { image_url } = req.query;
+     
+
+    if ( !image_url ) {
+      return res.status(400)
+                .send(`image_url is required`);
+    }
+    let Url:string
+try{
+    Url =await filterImageFromURL(image_url)
+    await  res.status(200).sendfile(Url,{},(err) => {
+                if (err) { return res.status(422).send(`Problem with Image Url `); }
+              });
+  } catch  (err) {
+    res.status(422).send(`Problem with Image Url`);
+  }
+  res.status(200).sendFile(Url,() =>{deleteLocalFiles([Url])}); 
+});
 
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
