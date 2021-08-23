@@ -7,9 +7,10 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   // Init the Express application
   const app = express();
+  require('dotenv').config();
 
   // Set the network port
-  const port = process.env.PORT || 8082;
+  const port = 8082;
   
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
@@ -31,7 +32,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     let Url:string
 try{
     Url =await filterImageFromURL(image_url)
-    await  res.status(200).sendfile(Url,{},(err) => {
+    await  res.status(200).sendFile(Url,{},(err) => {
                 if (err) { return res.status(422).send(`Problem with Image Url `); }
               });
   } catch  (err) {
