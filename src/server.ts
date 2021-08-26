@@ -10,7 +10,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   require('dotenv').config();
 
   // Set the network port
-  const port = 8082;
+  const port = process.env.PORT||8080;
   
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
